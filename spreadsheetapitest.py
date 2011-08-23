@@ -10,6 +10,8 @@ gd_client.email = 'pingini1@gmail.com'
 gd_client.password = 'xxxx'
 gd_client.ProgrammaticLogin()
 
+# Utility function to print some feed information:
+
 def _PrintFeed(feed):
   for i, entry in enumerate(feed.entry):
     if isinstance(feed, gdata.spreadsheet.SpreadsheetsCellsFeed):
@@ -25,18 +27,25 @@ def _PrintFeed(feed):
     else:
       print '%s %s\n' % (i, entry.title.text)
 
+# Utility to get the last part of a URL, usually useful as some sort of id:
+
+def GetLastIdPart(entryWithId):
+   id_parts = entryWithId.id.text.split('/')
+   return id_parts[len(id_parts) - 1]
+
+
+# Finds the first spreadsheets in the list of all spreadsheets:
+
 sfeed = gd_client.GetSpreadsheetsFeed()
 #_PrintFeed(sfeed)
-id_parts = sfeed.entry[0].id.text.split('/')
-curr_key = id_parts[len(id_parts) - 1]
+curr_key = GetLastIdPart(sfeed.entry[0])
+
+# Finds the first spreadsheet tab in the list of all tabs of the spreadsheet:
 
 wsfeed = gd_client.GetWorksheetsFeed(curr_key)
-ws_parts = wsfeed.entry[0].id.text.split('/')
-ws_key = ws_parts[len(ws_parts) - 1]
+ws_key = GetLastIdPart(wsfeed.entry[0])
 
+# Returns a list feed of all non-title rows in the spreadsheet and prints out the count of the entries:
 listfeed = gd_client.GetListFeed(curr_key, ws_key)
 print len(listfeed.entry)
-
-
-
 
