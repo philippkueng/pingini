@@ -15,19 +15,33 @@
 # limitations under the License.
 #
 from google.appengine.ext import webapp
-from google.appengine.ext.webapp import util
+from google.appengine.ext.webapp import util, template
 
+import os
+
+import sys
+sys.path.insert(0, 'tweepy.zip')
+
+import twitter_auth
+import twitter_methods
+import show
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write('Hello world!')
-
+      try:
+        values = {}
+        path = os.path.join(os.path.dirname(__file__), 'main.htm')
+        self.response.out.write(template.render(path, values))
+      except:
+        self.response.out.write('Application Error')
 
 def main():
-    application = webapp.WSGIApplication([('/', MainHandler)],
+    application = webapp.WSGIApplication([('/', MainHandler),
+                                          ('/show', twitter_methods.Tweet),
+                                          ('/twitter', twitter_auth.Authenticate_for_Twitter),
+                                          ('/twitter/callback', twitter_auth.Authenticate_for_Twitter_Callback)],
                                          debug=True)
     util.run_wsgi_app(application)
-
 
 if __name__ == '__main__':
     main()

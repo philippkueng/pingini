@@ -1,0 +1,8 @@
+body{
+  background: #dcddde;
+  font-family: Sans-Serif;
+}
+#container{
+  width: 600px;
+  margin: 40px auto;
+}
