@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+#### Example used as starting point : http://gdata-python-client.googlecode.com/hg/samples/spreadsheets/spreadsheetExample.py
+
 import gdata.spreadsheet.service
 import gdata.service
 import atom.service
